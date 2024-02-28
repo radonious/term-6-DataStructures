@@ -1,5 +1,14 @@
 #pragma once
-#include "list.h"
+#include <stdexcept>
+#include "../model/list.h"
+
+#if __APPLE__
+#define CLEAR "clear"
+#define PAUSE "echo Нажмите любую кнопку для продолжения...; read"
+#else
+#define PAUSE "pause"
+#define CLEAR "cls"
+#endif
 
 // интерфейс
 template <typename T>
@@ -103,9 +112,9 @@ void TestMenu<T>::Main() {
           << std::endl
           << "0 - Выход" << std::endl;
 
-      num = GetNumber("Введите номер нужной команды");
+      num = GetNumber("\nВведите номер нужной команды");
 
-      system("cls");
+      system(CLEAR);
 
       switch (num) {
         case 1:
@@ -163,13 +172,13 @@ void TestMenu<T>::Main() {
           return;
           break;
       }
-      system("pause");
+      system(PAUSE);
 
-      system("cls");
+      system(CLEAR);
     } catch (const std::exception &obj) {
       std::cout << obj.what() << std::endl;
-      system("pause");
-      system("cls");
+      system(PAUSE);
+      system(CLEAR);
     }
   }
 }
@@ -188,7 +197,7 @@ int TestMenu<T>::GetNumber(const char *message) {
   std::string ex;
   getline(std::cin, ex);
   if (std::cin.good() == false || ex.empty() == false) {
-    throw std::exception("Ошибка: Число введено некорректно\n");
+    throw std::invalid_argument("Ошибка: Число введено некорректно\n");
   }
 
   std::cin.clear();
@@ -211,7 +220,7 @@ T TestMenu<T>::GetData(const char *message) {
   std::string ex;
   getline(std::cin, ex);
   if (std::cin.good() == false || ex.empty() == false) {
-    throw std::exception("Ошибка: Значение введено некорректно\n");
+    throw std::invalid_argument("Ошибка: Значение введено некорректно\n");
   }
 
   std::cin.clear();

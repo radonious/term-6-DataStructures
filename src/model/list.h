@@ -330,8 +330,7 @@ void List<T>::Iterator::ToEnd() {
   if (this->list->tail != nullptr) {
     this->current = this->list->tail->next;
   }
-  throw std::exception(
-      "Ошибка: Попытка обращения к несуществующему элементу\n");
+  throw std::out_of_range( "Ошибка: Попытка обращения к несуществующему элементу\n");
 }
 
 template <typename T>
@@ -349,8 +348,7 @@ T &List<T>::Iterator::operator*() {
   if (current != nullptr) {
     return current->data;
   }
-  throw std::exception(
-      "Ошибка: Попытка обращения к несуществующему элементу\n");
+  throw std::out_of_range( "Ошибка: Попытка обращения к несуществующему элементу\n");
 }
 
 template <typename T>
@@ -359,7 +357,7 @@ typename List<T>::Iterator List<T>::Iterator::operator++() {
     current = current->next;
     return *this;
   }
-  throw std::exception(
+  throw std::out_of_range(
       "Ошибка: Попытка обращения к несуществующему элементу\n");
 }
 
@@ -369,7 +367,7 @@ typename List<T>::Iterator List<T>::Iterator::operator--() {
     current = current->prev;
     return *this;
   }
-  throw std::exception(
+  throw std::out_of_range(
       "Ошибка: Попытка обращения к несуществующему элементу\n");
 }
 
@@ -402,7 +400,7 @@ void List<T>::ReverseIterator::ToEnd() {
   if (this->list->head != nullptr) {
     this->current = this->list->head->prev;
   }
-  throw std::exception(
+  throw std::out_of_range(
       "Ошибка: Попытка обращения к несуществующему элементу\n");
 }
 
@@ -421,7 +419,7 @@ T &List<T>::ReverseIterator::operator*() {
   if (current != nullptr) {
     return current->data;
   }
-  throw std::exception(
+  throw std::out_of_range(
       "Ошибка: Попытка обращения к несуществующему элементу\n");
 }
 
@@ -431,7 +429,7 @@ typename List<T>::ReverseIterator List<T>::ReverseIterator::operator++() {
     current = current->prev;
     return *this;
   }
-  throw std::exception(
+  throw std::out_of_range(
       "Ошибка: Попытка обращения к несуществующему элементу\n");
 }
 
@@ -441,6 +439,6 @@ typename List<T>::ReverseIterator List<T>::ReverseIterator::operator--() {
     current = current->next;
     return *this;
   }
-  throw std::exception(
+  throw std::out_of_range(
       "Ошибка: Попытка обращения к несуществующему элементу\n");
 }

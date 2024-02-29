@@ -1,5 +1,6 @@
 #pragma once
 #include <stdexcept>
+
 #include "../model/list.h"
 
 #if __APPLE__
@@ -173,7 +174,6 @@ void TestMenu<T>::Main() {
           break;
       }
       system(PAUSE);
-
       system(CLEAR);
     } catch (const std::exception &obj) {
       std::cout << obj.what() << std::endl;

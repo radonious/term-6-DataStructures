@@ -1,10 +1,8 @@
-# Linux lib fix
 ifeq ($(OS), Linux)
 OPEN_CMD= xdg-open
 else 
 OPEN_CMD = open
 endif
-
 
 all: install clean run
 
@@ -18,8 +16,8 @@ uninstall:
 	rm -rf view/DLListView*
 
 clean: 
-	rm -rf view/.qt view/CMakeFiles view/DLListView_* view/*.cmake view/*Cache.txt view/Makefile *.out
+	rm -rf view/.qt view/*.user build-* view/CMakeFiles view/DLListView_* view/*.cmake view/*Cache.txt view/Makefile *.out *.dSYM
 
 test:
-	g++ --std=c++17 -Wall -Wextra -Werror console/main.cc -o list.out
+	g++ --std=c++17 -Wall -Wextra -Werror -g console/main.cc -o list.out
 	./list.out

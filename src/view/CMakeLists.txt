@@ -19,6 +19,7 @@ set(PROJECT_SOURCES
         mainwindow.cc
         mainwindow.h
         mainwindow.ui
+        ../model/list.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

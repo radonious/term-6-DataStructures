@@ -15,6 +15,5 @@ int main() {
     std::cout << err.what() << std::endl;
   }
 
-  system("pause");
   return 0;
 }

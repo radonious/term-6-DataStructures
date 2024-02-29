@@ -129,7 +129,11 @@ int List<T>::Size() const {
 template <typename T>
 void List<T>::Clear() {
   while (head != nullptr) {
-    delete std::exchange(head, head->next);
+    Node *next = head->next;
+    head->next = nullptr;
+    head->prev = nullptr;
+    delete head;
+    head = next;
   }
   tail = nullptr;
   size = 0;
@@ -271,6 +275,7 @@ bool List<T>::Remove(T data) {
   }
   return result;
 }
+
 template <typename T>
 bool List<T>::RemoveAt(int pos) {
   bool result = false;
@@ -278,10 +283,14 @@ bool List<T>::RemoveAt(int pos) {
     result = false;
   } else {
     if (pos == 0) {
-      Node *tmp = head;
-      head = head->next;
-      head->prev = nullptr;
-      delete tmp;
+      Node *next = head->next;
+      delete head;
+      head = next;
+      if (head != nullptr) {
+          head->prev = nullptr;
+      } else {
+          tail = head; // delete last element at [0]
+      }
     } else if (pos == (size - 1)) {
       Node *tmp = tail;
       tmp->prev->next = nullptr;
@@ -330,7 +339,6 @@ void List<T>::Iterator::ToEnd() {
   if (this->list->tail != nullptr) {
     this->current = this->list->tail->next;
   }
-  throw std::out_of_range( "Ошибка: Попытка обращения к несуществующему элементу\n");
 }
 
 template <typename T>
@@ -348,7 +356,8 @@ T &List<T>::Iterator::operator*() {
   if (current != nullptr) {
     return current->data;
   }
-  throw std::out_of_range( "Ошибка: Попытка обращения к несуществующему элементу\n");
+  throw std::out_of_range(
+      "Ошибка: Попытка обращения к несуществующему элементу\n");
 }
 
 template <typename T>
@@ -400,8 +409,6 @@ void List<T>::ReverseIterator::ToEnd() {
   if (this->list->head != nullptr) {
     this->current = this->list->head->prev;
   }
-  throw std::out_of_range(
-      "Ошибка: Попытка обращения к несуществующему элементу\n");
 }
 
 template <typename T>

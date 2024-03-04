@@ -1,13 +1,17 @@
-ifeq ($(OS), Darwin)
-RUN=open view/DLListView.app
+PLATFORM:=$(shell uname -s)
+
+ifeq ($(PLATFORM), Linux)
+OPEN_CMD=xdg-open
+else ifeq ($(PLATFORM), Darwin) 
+OPEN_CMD=open
 else 
-RUN=./view/DLListView
+OPEN_CMD=start
 endif
 
 all: install clean run
 
-run: 
-	$(RUN)
+run:
+	$(OPEN_CMD) view/DLListView.app
 
 install:
 	cd view && cmake CMakeLists.txt && cmake --build . --target all

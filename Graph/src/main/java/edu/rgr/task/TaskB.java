@@ -12,7 +12,7 @@ import java.util.Iterator;
 * 9. определение периферии взвешенного орграфа на основе алгоритма Флойда
 */
 
-public class TaskB<V> implements WeightedTask<V> {
+public class TaskB<V> {
     SimpleGraph<V> graph;
 
     double[][] adjacency;
@@ -25,7 +25,6 @@ public class TaskB<V> implements WeightedTask<V> {
         solve();
     }
 
-    @Override
     public void solve() {
         result = new HashSet<>();
         adjacency = getAdjacencyMatrix(graph);
@@ -84,7 +83,7 @@ public class TaskB<V> implements WeightedTask<V> {
             while (vei.hasNext()) {
                 Edge<V> e = vei.next();
                 // Floyd's algorithm doesn't use graph loops
-                if (i != e.getEnd().getIndex()) {
+                if (e != null && i != e.getEnd().getIndex()) {
                     // If edge has no weight then we will assume that it's weight is 1
                     int weight = e.getWeight() == null ? 1 : e.getWeight();
                     res[i][e.getEnd().getIndex()] = weight;
@@ -94,12 +93,10 @@ public class TaskB<V> implements WeightedTask<V> {
         return res;
     }
 
-    @Override
     public void set(SimpleGraph<V> graph) {
         this.graph = graph;
     }
 
-    @Override
     public void restart() {
         solve();
     }

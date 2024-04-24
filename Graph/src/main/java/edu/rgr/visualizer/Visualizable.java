@@ -1,7 +1,9 @@
 package edu.rgr.visualizer;
 
-public interface Visualizable {
-    void visualize();
+import edu.rgr.graph.Graph;
 
-    void render(String filename);
+import java.io.IOException;
+
+public interface Visualizable {
+    <V> void render(Graph<V> graph) throws IOException;
 }

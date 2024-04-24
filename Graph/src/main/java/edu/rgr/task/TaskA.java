@@ -13,19 +13,21 @@ import java.util.Iterator;
 * сортировки ациклического орграфа DAG (сортировка - на основе очереди истоков)
 */
 
-public class TaskA<V> implements UnweightedTask<V> {
+public class TaskA<V> {
     SimpleGraph<V> graph;
     ArrayDeque<Vertex<V>> stack;
     boolean[] visited;
 
     public TaskA(SimpleGraph<V> graph) {
-        this.graph = new SimpleGraph<>(graph);
+        this.graph = graph;
         solve();
     }
 
-    @Override
     public void solve() {
-        if (graph.getEdgeForm() == Graph.EdgeForm.Undirected) return;
+        if (graph.getEdgeForm() == Graph.EdgeForm.Undirected) {
+            System.err.println("Graph must be directed.");
+            return;
+        }
 
         stack = new ArrayDeque<>();
         visited = new boolean[graph.sizeVertex()];
@@ -53,21 +55,22 @@ public class TaskA<V> implements UnweightedTask<V> {
         visited[vertex.getIndex()] = true;
         Iterator<Edge<V>> vei = graph.iteratorOfVertexEdges(vertex);
         while (vei.hasNext()) {
-            Vertex<V> child = vei.next().getEnd();
-            if (!visited[child.getIndex()]) {
-                BFS(child);
+            Edge<V> edge = vei.next();
+            if (edge != null ) {
+                Vertex<V> child = edge.getEnd();
+                if (!visited[child.getIndex()]) {
+                    BFS(child);
+                }
             }
+
         }
         if (toStack) stack.push(vertex);
     }
 
-    @Override
     public void set(SimpleGraph<V> graph) {
         this.graph = graph;
     }
 
-
-    @Override
     public void restart() {
         solve();
     }

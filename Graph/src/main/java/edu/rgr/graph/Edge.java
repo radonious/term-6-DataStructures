@@ -52,7 +52,7 @@ public class Edge<V> {
 
     @Override
     public String toString() {
-        return "(" + start + ", " + end + ", " + weight +")";
+        return "(" + start + ", " + end + ", " + weight +", " + type +")";
     }
 
     public enum Type {

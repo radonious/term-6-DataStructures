@@ -1,16 +1,133 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-
+<?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="edu.rgr.app.Controller">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
-</VBox>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="622.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.rgr.app.Controller">
+   <children>
+      <ImageView fx:id="imageView" fitHeight="573.0" fitWidth="525.0" layoutX="14.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" />
+      <Group layoutX="669.0" layoutY="25.0" />
+      <Button layoutX="560.0" layoutY="59.0" mnemonicParsing="false" onMouseClicked="#vAddBtnClicked" prefHeight="30.0" prefWidth="82.0" text="Add">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Label layoutX="560.0" layoutY="23.0" prefHeight="30.0" prefWidth="64.0" text="Vertex">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Button layoutX="654.0" layoutY="59.0" mnemonicParsing="false" onMouseClicked="#vRemoveBtnClicked" prefHeight="30.0" prefWidth="82.0" text="Remove">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button layoutX="560.0" layoutY="98.0" mnemonicParsing="false" onMouseClicked="#vCountBtnClicked" prefHeight="30.0" prefWidth="82.0" text="Count">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button layoutX="654.0" layoutY="98.0" mnemonicParsing="false" onMouseClicked="#vDataBtnClicked" prefHeight="30.0" prefWidth="82.0" text="Data">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button layoutX="560.0" layoutY="202.0" mnemonicParsing="false" onMouseClicked="#eAddBtnClicked" prefHeight="30.0" prefWidth="82.0" text="Add">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Label layoutX="560.0" layoutY="166.0" prefHeight="30.0" prefWidth="64.0" text="Edge">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Button layoutX="654.0" layoutY="202.0" mnemonicParsing="false" onMouseClicked="#eRemoveBtnClicked" prefHeight="30.0" prefWidth="82.0" text="Remove">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button layoutX="560.0" layoutY="241.0" mnemonicParsing="false" onMouseClicked="#eCountBtnClicked" prefHeight="30.0" prefWidth="82.0" text="Count">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button layoutX="654.0" layoutY="241.0" mnemonicParsing="false" onMouseClicked="#eWeightBtnClicked" prefHeight="30.0" prefWidth="82.0" text="Weight">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button layoutX="560.0" layoutY="344.0" mnemonicParsing="false" onMouseClicked="#oPrintBtnClicked" prefHeight="30.0" prefWidth="82.0" text="Print">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Label layoutX="560.0" layoutY="308.0" prefHeight="30.0" prefWidth="64.0" text="Other">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Button layoutX="654.0" layoutY="344.0" mnemonicParsing="false" onMouseClicked="#oKBtnClicked" prefHeight="30.0" prefWidth="82.0" text="K">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button layoutX="560.0" layoutY="424.0" mnemonicParsing="false" onMouseClicked="#oMGraphBtnClicked" prefHeight="30.0" prefWidth="82.0" text="M-Graph">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button layoutX="654.0" layoutY="424.0" mnemonicParsing="false" onMouseClicked="#oLGraphBtnClicked" prefHeight="30.0" prefWidth="82.0" text="L-Graph">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button layoutX="560.0" layoutY="465.0" mnemonicParsing="false" onMouseClicked="#oFormBtnClicked" prefHeight="30.0" prefWidth="82.0" text="Get Form">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button layoutX="654.0" layoutY="465.0" mnemonicParsing="false" onMouseClicked="#oClearBtnClicked" prefHeight="30.0" prefWidth="82.0" text="Clear">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button layoutX="560.0" layoutY="385.0" mnemonicParsing="false" onMouseClicked="#oToDirBtnClicked" prefHeight="30.0" prefWidth="82.0" text="Directed">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button layoutX="654.0" layoutY="385.0" mnemonicParsing="false" onMouseClicked="#oToUndirBtnClicked" prefHeight="30.0" prefWidth="82.0" text="Undircted">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <CheckBox fx:id="vSaveWithDataCheckBox" layoutX="561.0" layoutY="137.0" mnemonicParsing="false" text="Add with data" />
+      <Separator layoutX="537.0" layoutY="23.0" orientation="VERTICAL" prefHeight="573.0" prefWidth="1.0" />
+      <ComboBox fx:id="oEngineChoiceBox" layoutX="560.0" layoutY="506.0" prefHeight="25.0" prefWidth="82.0" />
+      <CheckBox fx:id="oDrawUnlinked" layoutX="561.0" layoutY="541.0" mnemonicParsing="false" onMouseClicked="#update" selected="true" text="Draw Unlinked Nodes" />
+      <CheckBox fx:id="eSaveWithWeight" graphicTextGap="2.0" layoutX="561.0" layoutY="280.0" mnemonicParsing="false" onMouseClicked="#update" text="Add with weight" />
+      <Button layoutX="616.0" layoutY="573.0" mnemonicParsing="false" onMouseClicked="#taskAClicked" prefHeight="30.0" prefWidth="48.0" text="A">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Label layoutX="560.0" layoutY="573.0" prefHeight="30.0" prefWidth="64.0" text="Task">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Button layoutX="674.0" layoutY="573.0" mnemonicParsing="false" onMouseClicked="#taskBClicked" prefHeight="30.0" prefWidth="48.0" text="B">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+   </children>
+</Pane>

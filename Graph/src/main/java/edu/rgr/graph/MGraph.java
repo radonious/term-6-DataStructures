@@ -9,13 +9,13 @@ public class MGraph<V> implements Graph<V> {
     private final ArrayList<Vertex<V>> vertices;
     private final ArrayList<ArrayList<Edge<V>>> edges;
 
-    private int countVertex;
+    private int id = 0;
+
     private int countEdge;
 
     private EdgeForm edgeForm;
 
     MGraph() {
-        countVertex = 0;
         countEdge = 0;
         edgeForm = EdgeForm.Undirected;
         vertices = new ArrayList<>();
@@ -27,9 +27,13 @@ public class MGraph<V> implements Graph<V> {
         edgeForm = ef;
     }
 
+    private int currentIndex(Vertex<V> v) {
+        return vertices.indexOf(v);
+    }
+
     @Override
     public int sizeVertex() {
-        return countVertex;
+        return vertices.size();
     }
 
     @Override
@@ -55,11 +59,11 @@ public class MGraph<V> implements Graph<V> {
 
     @Override
     public Vertex<V> makeVertex(V data) {
-        Vertex<V> vertex = new Vertex<>(countVertex++, data);
+        Vertex<V> vertex = new Vertex<>(id++, data);
         vertices.add(vertex);
-        edges.add(new ArrayList<>(countVertex));
-        for (int i = 0; i < countVertex - 1; i++) {
-            edges.get(vertex.getIndex()).add(null);
+        edges.add(new ArrayList<>(sizeVertex()));
+        for (int i = 0; i < sizeVertex() - 1; i++) {
+            edges.get(currentIndex(vertex)).add(null);
         }
         for (ArrayList<Edge<V>> adj : edges) {
             adj.add(null);
@@ -69,17 +73,34 @@ public class MGraph<V> implements Graph<V> {
 
     @Override
     public Vertex<V> getVertex(int index) {
-        return vertices.get(index);
+        for (Vertex<V> vertex : vertices) {
+            if (vertex.getIndex() == index) {
+                return vertex;
+            }
+        }
+        return null;
     }
 
     @Override
     public void deleteVertex(Vertex<V> v) {
-        vertices.remove(v);
-        edges.remove(v.getIndex());
+        if (v == null || !vertices.contains(v)) return;
+        countEdge -= (int) edges.get(currentIndex(v)).stream().filter(e -> e != null && Edge.Type.MAIN.equals(e.getType())).count(); // Main edges
+        edges.remove(currentIndex(v)); // Horizontal delete of edges
         for (ArrayList<Edge<V>> adj : edges) {
-            adj.remove(v.getIndex());
+            // Null all edges linked with deleted vertex
+            for (int j = 0; j < adj.size(); ++j) {
+                if (adj.get(j) != null && adj.get(j).getEnd() == v) {
+                    if (adj.get(j).getType() == Edge.Type.MAIN) --countEdge; // Count only main edges
+                    adj.set(j, null);
+                }
+            }
+            // Vertical delete of edges
+            adj.remove(currentIndex(v));
         }
+        vertices.remove(v);
     }
+
+
 
     @Override
     public Edge<V> makeEdge(Vertex<V> vStart, Vertex<V> vEnd) {
@@ -88,25 +109,41 @@ public class MGraph<V> implements Graph<V> {
 
     @Override
     public Edge<V> makeEdge(Vertex<V> vStart, Vertex<V> vEnd, Integer weight) {
-        if (edges.get(vStart.getIndex()).get(vEnd.getIndex()) == null) ++countEdge;
-        Edge<V> edge = new Edge<>(vStart, vEnd, weight);
-        edges.get(vStart.getIndex()).set(vEnd.getIndex(), edge);
-        if (edgeForm == EdgeForm.Undirected && vStart.getIndex() != vEnd.getIndex()) edges.get(vEnd.getIndex()).set(vStart.getIndex(), new Edge<>(vEnd, vStart, weight, Edge.Type.COPY));
+        // Pointless to create edge with nulls or not existing vertices
+        if (vStart == null || vEnd == null) return null;
+        else if (!vertices.contains(vStart) || !vertices.contains(vEnd)) return null;
+
+        if (edges.get(vStart.getIndex()).get(vEnd.getIndex()) == null) ++countEdge; // Increment count if edge don't exist (update != add new)
+        Edge<V> edge = new Edge<>(vStart, vEnd, weight, Edge.Type.MAIN); // Create new main edge
+        edges.get(vStart.getIndex()).set(vEnd.getIndex(), edge); // Set main edge
+        // Add reversed edge copy if graph undirected and it's not loop
+        if (edgeForm == EdgeForm.Undirected && vStart.getIndex() != vEnd.getIndex()) {
+            edges.get(vEnd.getIndex()).set(vStart.getIndex(), new Edge<>(vEnd, vStart, weight, Edge.Type.COPY));
+        }
+
         return edge;
     }
 
     @Override
     public Edge<V> getEdge(Vertex<V> vStart, Vertex<V> vEnd) {
-        return edges.get(vStart.getIndex()).get(vEnd.getIndex());
+        if (vertices.contains(vStart) && vertices.contains(vEnd)) {
+            return edges.get(vStart.getIndex()).get(vEnd.getIndex());
+        } else {
+            return null;
+        }
     }
 
     @Override
     public List<Edge<V>> getEdges(Vertex<V> v) {
-        return edges.get(v.getIndex());
+        if (v == null || !vertices.contains(v)) return null;
+        return edges.get(vertices.indexOf(v));
     }
 
     @Override
     public void deleteEdge(Vertex<V> vStart, Vertex<V> vEnd) {
+        if (vStart == null || vEnd == null) return;
+        else if (!vertices.contains(vStart) || !vertices.contains(vEnd)) return;
+
         Edge<V> edge = edges.get(vStart.getIndex()).get(vEnd.getIndex());
         if (edge != null) {
             --countEdge;
@@ -119,7 +156,7 @@ public class MGraph<V> implements Graph<V> {
 
     @Override
     public void clear() {
-        countVertex = 0;
+        id = 0;
         countEdge = 0;
         vertices.clear();
         edges.clear();
@@ -128,16 +165,16 @@ public class MGraph<V> implements Graph<V> {
     @Override
     public Iterator<Vertex<V>> iteratorOfGraphVertices() {
         return new Iterator<>() {
-            int index = 0;
+            int current = 0;
 
             @Override
             public boolean hasNext() {
-                return index < countVertex;
+                return current < sizeVertex();
             }
 
             @Override
             public Vertex<V> next() {
-                return getVertex(index++);
+                return vertices.get(current++);
             }
         };
     }

@@ -4,39 +4,51 @@ import edu.rgr.graph.*;
 import edu.rgr.task.TaskA;
 import edu.rgr.task.TaskB;
 import edu.rgr.visualizer.Visualizer;
-import guru.nidi.graphviz.attribute.Color;
 import guru.nidi.graphviz.engine.Engine;
 import guru.nidi.graphviz.engine.Format;
-import guru.nidi.graphviz.engine.Graphviz;
-import guru.nidi.graphviz.engine.Rasterizer;
 
-
-import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Iterator;
-
-import static guru.nidi.graphviz.model.Factory.graph;
-import static guru.nidi.graphviz.model.Factory.node;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+        testRemove();
         testA1();
         testB1();
     }
 
     private static void testA1() throws IOException {
         SimpleGraph<String> graph = createGraph(Graph.EdgeForm.Directed, DualGraph.GraphForm.Matrix);
-        Visualizer.builder().format(Format.SVG).engine(Engine.DOT).filename("testA1pre").build().render(graph);
+        Visualizer.builder().format(Format.SVG).engine(Engine.DOT).filename("testA1pre").build().toFile(graph);
         TaskA<String> taskA = new TaskA<>(graph);
-        Visualizer.builder().format(Format.SVG).engine(Engine.DOT).filename("testA1post").build().render(graph);
+        Visualizer.builder().format(Format.SVG).engine(Engine.DOT).filename("testA1post").build().toFile(graph);
     }
 
     private static void testB1() throws IOException {
         SimpleGraph<String> graph = createGraph(Graph.EdgeForm.Undirected, DualGraph.GraphForm.Matrix);
         TaskB<String> taskB = new TaskB<>(graph);
         HashSet<Vertex<String>> res = taskB.result();
-        Visualizer.builder().periphery(res).format(Format.SVG).engine(Engine.DOT).filename("testB1").build().render(graph);
+        Visualizer.builder().periphery(res).format(Format.SVG).engine(Engine.DOT).filename("testB1").build().toFile(graph);
+    }
+
+    private static void testRemove() throws IOException {
+        SimpleGraph<String> graph = createGraph(Graph.EdgeForm.Directed, DualGraph.GraphForm.List);
+
+        graph.print();
+        System.out.println(graph.sizeEdge());
+        Visualizer.builder().format(Format.SVG).engine(Engine.DOT).filename("pre").build().toFile(graph);
+
+        graph.deleteVertex(graph.getVertex(2));
+        graph.deleteVertex(graph.getVertex(2));
+        graph.deleteVertex(graph.getVertex(0));
+        graph.deleteVertex(graph.getVertex(12));
+        graph.deleteVertex(graph.getVertex(11));
+        graph.deleteVertex(graph.getVertex(7));
+
+        graph.print();
+        System.out.println(graph.sizeEdge());
+        Visualizer.builder().format(Format.SVG).engine(Engine.DOT).filename("post").build().toFile(graph);
+
     }
 
     private static SimpleGraph<String> createGraph(Graph.EdgeForm ef, DualGraph.GraphForm gf) {

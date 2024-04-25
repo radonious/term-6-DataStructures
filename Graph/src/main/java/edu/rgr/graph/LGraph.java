@@ -1,21 +1,17 @@
 package edu.rgr.graph;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class LGraph<V> implements Graph<V> {
 
     private final HashMap<Vertex<V>, LinkedList<Edge<V>>> graph;
 
-    private int countVertex;
+    private int id = 0;
     private int countEdge;
 
     private EdgeForm edgeForm;
 
     LGraph() {
-        countVertex = 0;
         countEdge = 0;
         edgeForm = EdgeForm.Undirected;
         graph = new HashMap<>();
@@ -26,13 +22,9 @@ public class LGraph<V> implements Graph<V> {
         edgeForm = ef;
     }
 
-    LGraph(MGraph donor) {
-        this();
-    }
-
     @Override
     public int sizeVertex() {
-        return countVertex;
+        return graph.size();
     }
 
     @Override
@@ -59,7 +51,7 @@ public class LGraph<V> implements Graph<V> {
 
     @Override
     public Vertex<V> makeVertex(V data) {
-        Vertex<V> vertex = new Vertex<>(countVertex++, data);
+        Vertex<V> vertex = new Vertex<>(id++, data);
         graph.put(vertex, new LinkedList<>());
         return vertex;
     }
@@ -76,7 +68,20 @@ public class LGraph<V> implements Graph<V> {
 
     @Override
     public void deleteVertex(Vertex<V> v) {
+        if (v == null || !graph.containsKey(v)) return;
+        countEdge -= (int) graph.get(v).stream().filter(e -> Edge.Type.MAIN.equals(e.getType())).count();
         graph.remove(v);
+        for (Vertex<V> vertex : graph.keySet()) {
+            LinkedList<Edge<V>> list = graph.get(vertex);
+            Iterator<Edge<V>> it = list.iterator();
+            while (it.hasNext()) {
+                Edge<V> edge = it.next();
+                if (edge.getEnd().getIndex() == v.getIndex()) {
+                    if (edge.getType() == Edge.Type.MAIN) --countEdge;
+                    it.remove();
+                }
+            }
+        }
     }
 
     @Override
@@ -86,22 +91,28 @@ public class LGraph<V> implements Graph<V> {
 
     @Override
     public Edge<V> makeEdge(Vertex<V> vStart, Vertex<V> vEnd, Integer weight) {
-        Edge<V> edge = new Edge<>(vStart, vEnd, weight);
-        boolean foundSameEdge = false;
+        if (vStart == null || vEnd == null) return null;
+        else if (!graph.containsKey(vStart) || !graph.containsKey(vEnd)) return null;
+
+        Edge<V> edge = new Edge<>(vStart, vEnd, weight, Edge.Type.MAIN);
+        boolean foundSameEdge = false; // Update or Add new edge
         for (int i = 0; i < graph.get(vStart).size(); ++i) {
             if (graph.get(vStart).get(i).getEnd().getIndex() == vEnd.getIndex()) {
+                // Update
                 graph.get(vStart).set(i, edge);
                 foundSameEdge = true;
                 break;
             }
         }
+
         if (!foundSameEdge) {
+            // Add new
             ++countEdge;
             graph.get(vStart).add(edge);
             if (edgeForm == EdgeForm.Undirected && vStart.getIndex() != vEnd.getIndex()) {
                 graph.get(vEnd).add(new Edge<>(vEnd, vStart, weight, Edge.Type.COPY));
             }
-        } else if (edgeForm == EdgeForm.Undirected) {
+        } else if (edgeForm == EdgeForm.Undirected && vStart.getIndex() != vEnd.getIndex()) {
             for (int i = 0; i < graph.get(vEnd).size(); ++i) {
                 if (graph.get(vEnd).get(i).getStart() == vStart) {
                     graph.get(vEnd).set(i, new Edge<>(vEnd, vStart, weight));
@@ -115,6 +126,9 @@ public class LGraph<V> implements Graph<V> {
 
     @Override
     public Edge<V> getEdge(Vertex<V> vStart, Vertex<V> vEnd) {
+        if (vStart == null || vEnd == null) return null;
+        else if (!graph.containsKey(vStart) || !graph.containsKey(vEnd)) return null;
+
         for (Edge<V> edge : graph.get(vStart)) {
             if (edge.getEnd() == vEnd) {
                 return edge;
@@ -130,6 +144,9 @@ public class LGraph<V> implements Graph<V> {
 
     @Override
     public void deleteEdge(Vertex<V> vStart, Vertex<V> vEnd) {
+        if (vStart == null || vEnd == null) return;
+        else if (!graph.containsKey(vStart) || !graph.containsKey(vEnd)) return;
+
         Edge<V> tmp = null;
         for (Edge<V> edge : graph.get(vStart)) {
             if (edge.getEnd() == vEnd) {
@@ -148,7 +165,7 @@ public class LGraph<V> implements Graph<V> {
 
     @Override
     public void clear() {
-        countVertex = 0;
+        id = 0;
         countEdge = 0;
         graph.clear();
     }
@@ -156,16 +173,17 @@ public class LGraph<V> implements Graph<V> {
     @Override
     public Iterator<Vertex<V>> iteratorOfGraphVertices() {
         return new Iterator<>() {
-            int index = 0;
+            final List<Vertex<V>> list = graph.keySet().stream().toList();
+            int current = 0;
 
             @Override
             public boolean hasNext() {
-                return index < countVertex;
+                return current < list.size();
             }
 
             @Override
             public Vertex<V> next() {
-                return getVertex(index++);
+                return list.get(current++);
             }
         };
     }

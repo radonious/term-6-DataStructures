@@ -1,5 +1,6 @@
 package edu.rgr.console;
 
+import edu.rgr.app.Controller;
 import edu.rgr.graph.*;
 import edu.rgr.task.TaskA;
 import edu.rgr.task.TaskB;
@@ -10,7 +11,7 @@ import guru.nidi.graphviz.engine.Format;
 import java.io.IOException;
 import java.util.HashSet;
 
-public class Main {
+public class Main extends Controller {
     public static void main(String[] args) throws IOException {
         testRemove();
         testA1();

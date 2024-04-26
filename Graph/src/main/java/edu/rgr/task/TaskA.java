@@ -50,8 +50,7 @@ public class TaskA<V> {
     }
 
     private void BFS(Vertex<V> vertex) {
-        boolean toStack = false;
-        if (!visited[vertex.getIndex()]) toStack = true;
+        boolean toStack = !visited[vertex.getIndex()];
         visited[vertex.getIndex()] = true;
         Iterator<Edge<V>> vei = graph.iteratorOfVertexEdges(vertex);
         while (vei.hasNext()) {

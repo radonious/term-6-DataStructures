@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.nio.IntBuffer;
 import java.util.Optional;
 
-public class Controller {
+public class Controller extends Application {
 
     SimpleGraph<String> graph;
 
@@ -47,7 +47,7 @@ public class Controller {
 
     @FXML
     void initialize() throws IOException {
-        graph = new SimpleGraph<>(Graph.EdgeForm.Undirected, DualGraph.GraphForm.Matrix);
+        graph = new SimpleGraph<>(Graph.EdgeForm.Directed, DualGraph.GraphForm.List);
         taskA = new TaskA<>(graph);
         taskB = new TaskB<>(graph);
         oEngineChoiceBox.getItems().addAll("FDP","DOT", "CIRCO","NEATO","OSAGE","TWOPI");
@@ -106,7 +106,7 @@ public class Controller {
     @FXML
     void vDataBtnClicked(MouseEvent event) {
         Integer index = dialogIndex();
-        if (index != null && index < graph.sizeVertex()) {
+        if (index != null && graph.getVertex(index) != null) {
             popUp("Vertex data", String.valueOf(graph.getVertex(index).getData()));
         }
     }
@@ -215,7 +215,7 @@ public class Controller {
         updateImage();
     }
     @FXML
-    void taskBClicked(MouseEvent event) throws IOException {
+    void taskBClicked(MouseEvent event) {
         taskB.set(graph);
         taskB.restart();
         BufferedImage image = Visualizer.builder()

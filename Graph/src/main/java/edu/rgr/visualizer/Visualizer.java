@@ -4,6 +4,7 @@ import edu.rgr.graph.Edge;
 import edu.rgr.graph.Graph;
 import edu.rgr.graph.Vertex;
 import guru.nidi.graphviz.attribute.Color;
+import guru.nidi.graphviz.attribute.Label;
 import guru.nidi.graphviz.attribute.Style;
 import guru.nidi.graphviz.engine.Engine;
 import guru.nidi.graphviz.engine.Format;
@@ -18,6 +19,7 @@ import java.util.Iterator;
 
 import static guru.nidi.graphviz.model.Factory.graph;
 import static guru.nidi.graphviz.model.Factory.node;
+import static guru.nidi.graphviz.model.Link.to;
 
 public class Visualizer implements GraphVisualizer {
     boolean drawUnlinked;
@@ -45,12 +47,15 @@ public class Visualizer implements GraphVisualizer {
             while (ei.hasNext()) {
                 Edge<V> e = ei.next();
                 if (e != null) {
-                    g = g.with(node(Integer.toString(e.getStart().getIndex())).link(node(Integer.toString(e.getEnd().getIndex()))));
+                    String start = Integer.toString(e.getStart().getIndex());
+                    String end = Integer.toString(e.getEnd().getIndex());
+                    String weight = e.getWeight() == null ? "" : Integer.toString(e.getWeight());
+                    g = g.with(node(start).link(to(node(end)).with(Label.of(weight))));
                     if (periphery != null && periphery.contains(e.getStart())) {
-                        g = g.with(node(Integer.toString(e.getStart().getIndex())).with(Color.RED, Style.BOLD));
+                        g = g.with(node(start).with(Color.RED, Style.BOLD));
                     }
                     if (periphery != null && periphery.contains(e.getEnd())) {
-                        g = g.with(node(Integer.toString(e.getEnd().getIndex())).with(Color.RED, Style.BOLD));
+                        g = g.with(node(end).with(Color.RED, Style.BOLD));
                     }
                 }
             }

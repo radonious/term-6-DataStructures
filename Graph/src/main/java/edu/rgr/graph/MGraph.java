@@ -15,14 +15,14 @@ public class MGraph<V> implements Graph<V> {
 
     private EdgeForm edgeForm;
 
-    MGraph() {
+    public MGraph() {
         countEdge = 0;
         edgeForm = EdgeForm.Undirected;
         vertices = new ArrayList<>();
         edges = new ArrayList<>();
     }
 
-    MGraph(EdgeForm ef) {
+    public MGraph(EdgeForm ef) {
         this();
         edgeForm = ef;
     }
@@ -113,12 +113,12 @@ public class MGraph<V> implements Graph<V> {
         if (vStart == null || vEnd == null) return null;
         else if (!vertices.contains(vStart) || !vertices.contains(vEnd)) return null;
 
-        if (edges.get(vStart.getIndex()).get(vEnd.getIndex()) == null) ++countEdge; // Increment count if edge don't exist (update != add new)
+        if (edges.get(currentIndex(vStart)).get(currentIndex(vEnd)) == null) ++countEdge; // Increment count if edge don't exist (update != add new)
         Edge<V> edge = new Edge<>(vStart, vEnd, weight, Edge.Type.MAIN); // Create new main edge
-        edges.get(vStart.getIndex()).set(vEnd.getIndex(), edge); // Set main edge
+        edges.get(currentIndex(vStart)).set(currentIndex(vEnd), edge); // Set main edge
         // Add reversed edge copy if graph undirected and it's not loop
         if (edgeForm == EdgeForm.Undirected && vStart.getIndex() != vEnd.getIndex()) {
-            edges.get(vEnd.getIndex()).set(vStart.getIndex(), new Edge<>(vEnd, vStart, weight, Edge.Type.COPY));
+            edges.get(currentIndex(vEnd)).set(currentIndex(vStart), new Edge<>(vEnd, vStart, weight, Edge.Type.COPY));
         }
 
         return edge;
@@ -127,7 +127,7 @@ public class MGraph<V> implements Graph<V> {
     @Override
     public Edge<V> getEdge(Vertex<V> vStart, Vertex<V> vEnd) {
         if (vertices.contains(vStart) && vertices.contains(vEnd)) {
-            return edges.get(vStart.getIndex()).get(vEnd.getIndex());
+            return edges.get(currentIndex(vStart)).get(currentIndex(vEnd));
         } else {
             return null;
         }
@@ -144,12 +144,12 @@ public class MGraph<V> implements Graph<V> {
         if (vStart == null || vEnd == null) return;
         else if (!vertices.contains(vStart) || !vertices.contains(vEnd)) return;
 
-        Edge<V> edge = edges.get(vStart.getIndex()).get(vEnd.getIndex());
+        Edge<V> edge = edges.get(currentIndex(vStart)).get(currentIndex(vEnd));
         if (edge != null) {
             --countEdge;
-            edges.get(vStart.getIndex()).set(vEnd.getIndex(), null);
+            edges.get(currentIndex(vStart)).set(currentIndex(vEnd), null);
             if (edgeForm == EdgeForm.Undirected) {
-                edges.get(vEnd.getIndex()).set(vStart.getIndex(), null);
+                edges.get(currentIndex(vEnd)).set(currentIndex(vStart), null);
             }
         }
     }
@@ -217,7 +217,7 @@ public class MGraph<V> implements Graph<V> {
 
             @Override
             public boolean hasNext() {
-                return index < list.size();
+                return list != null && index < list.size();
             }
 
             @Override

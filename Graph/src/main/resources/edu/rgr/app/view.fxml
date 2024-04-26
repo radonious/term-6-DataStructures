@@ -113,7 +113,7 @@
       <Separator layoutX="537.0" layoutY="23.0" orientation="VERTICAL" prefHeight="573.0" prefWidth="1.0" />
       <ComboBox fx:id="oEngineChoiceBox" layoutX="560.0" layoutY="506.0" prefHeight="25.0" prefWidth="82.0" />
       <CheckBox fx:id="oDrawUnlinked" layoutX="561.0" layoutY="541.0" mnemonicParsing="false" onMouseClicked="#update" selected="true" text="Draw Unlinked Nodes" />
-      <CheckBox fx:id="eSaveWithWeight" graphicTextGap="2.0" layoutX="561.0" layoutY="280.0" mnemonicParsing="false" onMouseClicked="#update" text="Add with weight" />
+      <CheckBox fx:id="eSaveWithWeight" graphicTextGap="2.0" layoutX="561.0" layoutY="280.0" mnemonicParsing="false" text="Add with weight" />
       <Button layoutX="616.0" layoutY="573.0" mnemonicParsing="false" onMouseClicked="#taskAClicked" prefHeight="30.0" prefWidth="48.0" text="A">
          <font>
             <Font size="14.0" />

@@ -11,8 +11,8 @@ public class SimpleGraph<V> implements DualGraph<V> {
     private Graph<V> graph;
 
     public SimpleGraph() {
-        graphForm = GraphForm.Matrix;
-        initGraph(EdgeForm.Directed, graphForm);
+        graphForm = GraphForm.List;
+        initGraph(EdgeForm.Undirected, graphForm);
     }
 
     public SimpleGraph(EdgeForm ef, GraphForm gf) {

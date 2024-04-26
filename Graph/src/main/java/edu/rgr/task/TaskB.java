@@ -4,7 +4,6 @@ import edu.rgr.graph.Edge;
 import edu.rgr.graph.SimpleGraph;
 import edu.rgr.graph.Vertex;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -39,6 +38,7 @@ public class TaskB<V> {
             for (int j = i + 1; j < adjacency.length; j++) {
                 if (adjacency[i][j] == diameter) {
                     result.add(graph.getVertex(i));
+                    result.add(graph.getVertex(j));
                 }
             }
         }
